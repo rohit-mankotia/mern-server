@@ -19,13 +19,11 @@ module.exports = {
       if (!firstName || !lastName || !email || !password)
         return res
           .status(400)
-          .json({ success: false, error: "Please fill all fields" });
+          .json({ success: false, message: "Please fill all fields" });
       if (req.file) req.body.profilePic = `${BASE_URL}${req.file.filename}`;
       const isExist = await Admin.findOne({ email });
       if (isExist)
-        return res
-          .status(400)
-          .json({ success: false, error: "Email already exist" });
+        return res.json({ success: false, message: "Email already exist" });
       const hashPassword = await bcrypt.hash(password, 10);
       const admin = new Admin({
         firstName,
@@ -49,17 +47,19 @@ module.exports = {
       if (!email || !password)
         return res
           .status(400)
-          .json({ success: false, error: "All fields required" });
+          .json({ success: false, message: "All fields required" });
       const isExist = await Admin.findOne({ email });
       if (!isExist)
-        return res
-          .status(400)
-          .json({ success: false, error: "Email not exist please signup" });
+        return res.json({
+          success: false,
+          message: "Email not exist please sign up",
+        });
       const match = await bcrypt.compare(password, isExist.password);
       if (!match)
-        return res
-          .status(401)
-          .json({ success: false, error: "Invalid password" });
+        return res.json({
+          success: false,
+          message: "Please check your email or password",
+        });
       const token = jwt.sign({ data: isExist }, JWT_SECRET, {
         expiresIn: "1h",
       });
