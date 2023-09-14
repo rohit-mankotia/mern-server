@@ -22,7 +22,7 @@ const upload = multer({ storage: storage });
 router.post('/signup', signup);
 router.post('/signin', signin);
 router.post('/createBlog', auth, upload.single('picture'), createBlog);
-router.get('/allBlogs', auth, allBlogs);
+router.get("/allBlogs", allBlogs);
 router.get('/searchByCategory/:category', auth, searchByCategory);
 router.post('/editBlog/:id', auth, upload.single('picture'), editBlog);
 
