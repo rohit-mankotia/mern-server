@@ -105,7 +105,7 @@ module.exports = {
     try {
       const blogs = await Blog.find()
         .sort("-createdAt")
-        .populate("author", "firstName");
+        .populate("author", "firstName lastName");
       if (!blogs || blogs.length === 0)
         return res
           .status(200)
@@ -118,7 +118,10 @@ module.exports = {
   },
   async searchByCategory(req, res) {
     try {
-      const blogs = await Blog.find({ category: req.params.category });
+      const blogs = await Blog.find({ category: req.params.category })
+        .sort("-createdAt")
+        .populate("author", "firstName lastName");
+        
       if (!blogs || blogs.length === 0)
         return res
           .status(200)
